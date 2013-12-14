@@ -31,7 +31,6 @@ require File.expand_path(File.dirname(__FILE__) + '/neo')
 
 class DiceScoring
   def score(dice)
-    # You need to write this method
     if dice.length() == 0
       return 0
     end
@@ -40,51 +39,45 @@ class DiceScoring
   end
 
   def create_scores_map(dice)
-    scores_map = { "1" => 0, "2" => 0, "3" => 0, "4" => 0, "5" => 0, "6" => 0}
+    scores_map = Hash.new(0)
     dice.each do |score|
-      score_as_string = score.to_s
-      new_count = scores_map.fetch(score_as_string)
-      new_count = new_count+1
-      scores_map[score_as_string] = new_count
+      scores_map[score] += 1
     end
     return scores_map
   end
 
   def calculate_score(scores_map)
     sum = 0
-    if scores_map.fetch("1") == 1
-      sum += 100
-    elsif scores_map.fetch("1") == 2
-      sum += 200
-    elsif scores_map.fetch("1") == 3
-      sum += 1000
-    elsif scores_map.fetch("1") == 4
-      sum += 1100
-    elsif scores_map.fetch("1") == 5
-      sum += 1200
-    end
-    if scores_map.fetch("2") == 3
-      sum += 200
-    end
-    if scores_map.fetch("3") == 3
-      sum += 300
-    end
-    if scores_map.fetch("4") == 3
-      sum += 400
-    end
-    if scores_map.fetch("5") == 1
-      sum += 50
-    elsif scores_map.fetch("5") == 2
-      sum += 100
-    elsif scores_map.fetch("5") == 3
-      sum += 500
-    elsif scores_map.fetch("5") == 4
-      sum += 550
-    elsif scores_map.fetch("5") == 5
-      sum += 600
-    end
-    if scores_map.fetch("6") == 3
-      sum += 600
+    scores_map.each do |score, times|
+      if score == 1
+        if times == 1
+          sum += 100
+        elsif times == 2
+          sum += 200
+        elsif times == 3
+          sum += 1000
+        elsif times == 4
+          sum += 1100
+        elsif times == 5
+          sum += 1200
+        end
+      elsif score == 5
+        if times == 1
+          sum += 50
+        elsif times == 2
+          sum += 100
+        elsif times == 3
+          sum += 500
+        elsif times == 4
+          sum += 550
+        elsif times == 5
+          sum += 600
+        end
+      else
+        if times >= 3
+          sum += 100*score
+        end
+      end
     end
     return sum
   end
@@ -93,9 +86,6 @@ end
 
 def score(dice)
   # You need to write this method
-  if dice.length() == 0
-    return 0
-  end
   scoring = DiceScoring.new
   return scoring.score(dice)
 end
