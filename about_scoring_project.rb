@@ -61,20 +61,14 @@ class DiceScoring
   end
 
   def calculate_score_1(times)
-    if times == 1
-      return 100
-    elsif times == 2
-      return 200
-    elsif times == 3
-      return 1000
-    elsif times == 4
-      return 1100
-    elsif times == 5
-      return 1200
-    end
+    calculate_score_for_special_score(times)*2
   end
 
   def calculate_score_5(times)
+    return calculate_score_for_special_score(times)
+  end
+
+  def calculate_score_for_special_score(times)
     if times == 1
       return 50
     elsif times == 2
@@ -86,6 +80,7 @@ class DiceScoring
     elsif times == 5
       return 600
     end
+    return 0
   end
 
   def calculate_score_default(times, score)
