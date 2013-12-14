@@ -29,65 +29,75 @@ require File.expand_path(File.dirname(__FILE__) + '/neo')
 #
 # Your goal is to write the score method.
 
+class DiceScoring
+  def score(dice)
+    # You need to write this method
+    if dice.length() == 0
+      return 0
+    end
+    scores_map = create_scores_map(dice)
+    return calculate_score(scores_map)
+  end
+
+  def create_scores_map(dice)
+    scores_map = { "1" => 0, "2" => 0, "3" => 0, "4" => 0, "5" => 0, "6" => 0}
+    dice.each do |score|
+      score_as_string = score.to_s
+      new_count = scores_map.fetch(score_as_string)
+      new_count = new_count+1
+      scores_map[score_as_string] = new_count
+    end
+    return scores_map
+  end
+
+  def calculate_score(scores_map)
+    sum = 0
+    if scores_map.fetch("1") == 1
+      sum += 100
+    elsif scores_map.fetch("1") == 2
+      sum += 200
+    elsif scores_map.fetch("1") == 3
+      sum += 1000
+    elsif scores_map.fetch("1") == 4
+      sum += 1100
+    elsif scores_map.fetch("1") == 5
+      sum += 1200
+    end
+    if scores_map.fetch("2") == 3
+      sum += 200
+    end
+    if scores_map.fetch("3") == 3
+      sum += 300
+    end
+    if scores_map.fetch("4") == 3
+      sum += 400
+    end
+    if scores_map.fetch("5") == 1
+      sum += 50
+    elsif scores_map.fetch("5") == 2
+      sum += 100
+    elsif scores_map.fetch("5") == 3
+      sum += 500
+    elsif scores_map.fetch("5") == 4
+      sum += 550
+    elsif scores_map.fetch("5") == 5
+      sum += 600
+    end
+    if scores_map.fetch("6") == 3
+      sum += 600
+    end
+    return sum
+  end
+
+end
+
 def score(dice)
   # You need to write this method
   if dice.length() == 0
     return 0
   end
-  scoresMap = { "1" => 0, "2" => 0, "3" => 0, "4" => 0, "5" => 0, "6" => 0}
-  dice.each do |score|
-    puts(score)
-    score_as_string = score.to_s
-    newCount = scoresMap.fetch(score_as_string)
-    puts("score = #{score} newCount = #{newCount}")
-    newCount = newCount+1
-    puts("score = #{score} newCount = #{newCount}")
-    scoresMap[score_as_string] = newCount
-  end
-  puts(scoresMap)
-  return calculate_score(scoresMap)
-end
-
-def create_scores_map()
-end
-
-def calculate_score(scoresMap)
-  sum = 0
-  if scoresMap.fetch("1") == 1
-    sum += 100
-  elsif scoresMap.fetch("1") == 2
-    sum += 200
-  elsif scoresMap.fetch("1") == 3
-    sum += 1000
-  elsif scoresMap.fetch("1") == 4
-    sum += 1100
-  elsif scoresMap.fetch("1") == 5
-    sum += 1200
-  end
-  if scoresMap.fetch("2") == 3
-    sum += 200
-  end
-  if scoresMap.fetch("3") == 3
-    sum += 300
-  end
-  if scoresMap.fetch("4") == 3
-    sum += 400
-  end
-  if scoresMap.fetch("5") == 1
-    sum += 50
-  elsif scoresMap.fetch("5") == 2
-    sum += 100
-  elsif scoresMap.fetch("5") == 3
-    sum += 500
-  elsif scoresMap.fetch("5") == 4
-    sum += 550
-  elsif scoresMap.fetch("5") == 5
-    sum += 600
-  end
-  if scoresMap.fetch("6") == 3
-    sum += 600
-  end
-  return sum
+  scoring = DiceScoring.new
+  return scoring.score(dice)
 end
 
 class AboutScoringProject < Neo::Koan
