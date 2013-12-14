@@ -50,36 +50,49 @@ class DiceScoring
     sum = 0
     scores_map.each do |score, times|
       if score == 1
-        if times == 1
-          sum += 100
-        elsif times == 2
-          sum += 200
-        elsif times == 3
-          sum += 1000
-        elsif times == 4
-          sum += 1100
-        elsif times == 5
-          sum += 1200
-        end
+        sum += calculate_score_1(times)
       elsif score == 5
-        if times == 1
-          sum += 50
-        elsif times == 2
-          sum += 100
-        elsif times == 3
-          sum += 500
-        elsif times == 4
-          sum += 550
-        elsif times == 5
-          sum += 600
-        end
+        sum += calculate_score_5(times)
       else
-        if times >= 3
-          sum += 100*score
-        end
+        sum += calculate_score_default(times,score)
       end
     end
     return sum
+  end
+
+  def calculate_score_1(times)
+    if times == 1
+      return 100
+    elsif times == 2
+      return 200
+    elsif times == 3
+      return 1000
+    elsif times == 4
+      return 1100
+    elsif times == 5
+      return 1200
+    end
+  end
+
+  def calculate_score_5(times)
+    if times == 1
+      return 50
+    elsif times == 2
+      return 100
+    elsif times == 3
+      return 500
+    elsif times == 4
+      return 550
+    elsif times == 5
+      return 600
+    end
+  end
+
+  def calculate_score_default(times, score)
+    if times >= 3
+      return 100*score
+    end
+    return 0
   end
 
 end
