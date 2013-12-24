@@ -13,12 +13,36 @@ require File.expand_path(File.dirname(__FILE__) + '/neo')
 # of the Proxy class is given in the AboutProxyObjectProject koan.
 
 class Proxy
+  attr_reader :messages # attr_reader is mentioned in about_classes
   def initialize(target_object)
     @object = target_object
-    # ADD MORE CODE HERE
+    @messages = Array.new # Is this the best way to initialize messages?
   end
 
   # WRITE CODE HERE
+  def method_missing(method, *args, &block) # Taken from about_message_passing
+    @messages << method
+    # Eyal: took some time to get the "respond_to + the symbol usage
+    if @object.respond_to?(method)
+      @object.__send__(method, *args, &block)
+    else
+      super(method, *args, &block)
+    end
+  end
+
+  # Eyal:
+  # Taken from http://blog.enriquez.me/2010/2/21/dont-forget-about-respond-to-when-implementing-method-missing/ 
+  def respond_to?(method, include_private = false)
+    super || @object.respond_to?(method, include_private)
+  end
+
+  def called?(method)
+    return @messages.include?(method)
+  end
+  
+  def number_of_times_called(method)
+    return @messages.count(method)
+  end
 end
 
 # The proxy object should pass the following Koan:
@@ -93,7 +117,6 @@ class AboutProxyObjectProject < Neo::Koan
   end
 end
 
-
 # ====================================================================
 # The following code is to support the testing of the Proxy class.  No
 # changes should be necessary to anything below this comment.
@@ -101,7 +124,6 @@ end
 # Example class using in the proxy testing above.
 class Television
   attr_accessor :channel
-
   def power
     if @power == :on
       @power = :off
